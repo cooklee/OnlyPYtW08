@@ -1,0 +1,17 @@
+<table>
+    {% for item in lst %}
+        <tr style={% cycle 'background-color:darkgray;' 'background-color:grey;' 'background-color:pink;' %}>
+            <td>
+                {{ forloop.counter }}
+            </td>
+            <td>
+                {% if forloop.counter == 3 %}
+                    <h1>{{ item }}</h1>
+                {% else %}
+                    {{ item|truncatechars:4 }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
