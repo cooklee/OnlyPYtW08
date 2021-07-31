@@ -3,9 +3,8 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
 from django.views import View
-import datetime
 
-from forms import AddAuthorForm
+from jej.forms import AddAuthorForm, AddBookForm
 from jej.models import Author, Book
 
 
@@ -43,7 +42,7 @@ class AddAuthorView(View):
 class AddAuthorByFormView(View):
     def get(self, request):
         form = AddAuthorForm()
-        return render(request, 'form.html', {'form':form})
+        return render(request, 'form.html', {'form': form})
 
     def post(self, request):
         form = AddAuthorForm(request.POST)
@@ -55,15 +54,10 @@ class AddAuthorByFormView(View):
         return render(request, 'form.html', {'form': form})
 
 
-
-
-
-
-
 class AddBookView(View):
     def get(self, request):
         authors = Author.objects.all()
-        return render(request, 'addBookForm.html', {'authors':authors})
+        return render(request, 'addBookForm.html', {'authors': authors})
 
     def post(self, request):
         title = request.POST.get('title')
@@ -71,6 +65,26 @@ class AddBookView(View):
         author = Author.objects.get(pk=author_id)
         Book.objects.create(title=title, author=author)
         return redirect('add_book')
+
+class AddBookByFormView(View):
+    def get(self, request):
+        form = AddBookForm()
+        return render(request, 'form.html', {'form': form})
+
+    def post(self, request):
+        form = AddBookForm(request.POST)
+        if form.is_valid():
+
+            # title = form.cleaned_data.get('title')
+            # author = form.cleaned_data.get('author')
+            #a = Book.objects.create(title=title, author=author)
+
+            a = Book.objects.create(**form.cleaned_data)
+            return redirect('list_book')
+        return render(request, 'form.html', {'form': form})
+
+
+
 
 
 class ListAuthorView(View):
