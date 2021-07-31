@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 
-from jej.forms import AddAuthorForm, AddBookForm
+from jej.forms import AddAuthorForm, AddBookForm, AddBookModelForm
 from jej.models import Author, Book
 
 
@@ -68,18 +68,20 @@ class AddBookView(View):
 
 class AddBookByFormView(View):
     def get(self, request):
-        form = AddBookForm()
+        form = AddBookModelForm()
         return render(request, 'form.html', {'form': form})
 
     def post(self, request):
-        form = AddBookForm(request.POST)
+        form = AddBookModelForm(request.POST)
         if form.is_valid():
 
             # title = form.cleaned_data.get('title')
             # author = form.cleaned_data.get('author')
             #a = Book.objects.create(title=title, author=author)
 
-            a = Book.objects.create(**form.cleaned_data)
+            # a = Book.objects.create(**form.cleaned_data)
+            book = form.save()
+
             return redirect('list_book')
         return render(request, 'form.html', {'form': form})
 

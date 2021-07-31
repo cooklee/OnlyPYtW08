@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from jej.models import Author
+from jej.models import Author, Book
 
 
 def check_start_with_s(value):
@@ -11,8 +11,9 @@ def check_start_with_s(value):
 
 
 class AddAuthorForm(forms.Form):
-    first_name = forms.CharField(max_length=20, error_messages={'required':'Wypełnij to cholero'})
-    last_name = forms.CharField(max_length=20, label='Nazwisko')
+    first_name = forms.CharField(max_length=20, error_messages={'required': 'Wypełnij to cholero'},
+                                 widget=forms.Textarea)
+    last_name = forms.CharField(max_length=20, label='Nazwisko', widget=forms.PasswordInput)
 
     def clean(self):
         data = super().clean()
@@ -21,8 +22,14 @@ class AddAuthorForm(forms.Form):
 
 
 class AddBookForm(forms.Form):
-    title = forms.CharField(max_length=20)
+    title = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'placeholder': 'Title'}), label='')
     author = forms.ModelChoiceField(queryset=Author.objects.all())
 
 
-
+class AddBookModelForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['year', 'author']
+        widgets = {
+            'year': forms.Textarea
+        }
