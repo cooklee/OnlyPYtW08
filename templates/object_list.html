@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block zawartosc %}
+    {% for obj in objects %}
+        <li>{{ obj }}</li>
+    {% endfor %}
+{% endblock %}

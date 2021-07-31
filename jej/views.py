@@ -3,7 +3,9 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.urls import reverse
 from django.views import View
+import datetime
 
+from forms import AddAuthorForm
 from jej.models import Author, Book
 
 
@@ -28,7 +30,7 @@ class AddAuthorView(View):
             author = Author.objects.get(id=author_id)
         else:
             author = None
-        return render(request, 'addAuthorForm.html', {'author':author})
+        return render(request, 'addAuthorForm.html', {'author': author, 'user': 'a to ci niespodzianka'})
 
     def post(self, request):
         imie = request.POST.get('first_name')
@@ -38,22 +40,46 @@ class AddAuthorView(View):
         return redirect(url)
 
 
-class ListAuthorView(View):
+class AddAuthorByFormView(View):
     def get(self, request):
-        authors = Author.objects.all()
-        return render(request, 'author_list.html', {'authors':authors})
+        form = AddAuthorForm()
+        return render(request, 'form.html', {'form':form})
+
+    def post(self, request):
+        form = AddAuthorForm(request.POST)
+        if form.is_valid():
+            imie = form.cleaned_data.get('first_name')
+            nazwisko = form.cleaned_data.get('last_name')
+            a = Author.objects.create(first_name=imie, last_name=nazwisko)
+            return redirect('list_author')
+        return render(request, 'form.html', {'form': form})
+
+
+
+
+
+
 
 class AddBookView(View):
     def get(self, request):
-        return render(request, 'addBookForm.html')
+        authors = Author.objects.all()
+        return render(request, 'addBookForm.html', {'authors':authors})
 
     def post(self, request):
         title = request.POST.get('title')
-        Book.objects.create(title=title)
+        author_id = request.POST.get('author')
+        author = Author.objects.get(pk=author_id)
+        Book.objects.create(title=title, author=author)
         return redirect('add_book')
+
+
+class ListAuthorView(View):
+    def get(self, request):
+        authors = Author.objects.all()
+        return render(request, 'object_list.html', {'objects': authors})
 
 
 class ListBookView(View):
     def get(self, request):
         books = Book.objects.all()
-        return render(request, 'book_list.html', {'books':books})
+        return render(request, 'object_list.html', {'objects': books})

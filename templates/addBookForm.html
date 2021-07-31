@@ -3,6 +3,11 @@
 <form method="post">
     {% csrf_token %}
     <p>Title:<input type="text" name="title"></p>
+    <select name="author">
+    {% for author in authors %}
+        <option value="{{ author.id }}">{{ author }}</option>
+    {% endfor %}
+    </select>
     <p><input type="submit" ></p>
 
 </form>

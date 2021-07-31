@@ -22,6 +22,7 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('list/', views.NameListView.as_view(), name='list_view'),
     path('add_author/', views.AddAuthorView.as_view(), name='add_author'),
+    path('add_author_by_form/', views.AddAuthorByFormView.as_view(), name='add_author_by_form'),
     path('list_author/', views.ListAuthorView.as_view(), name='list_author'),
     path('add_book/', views.AddBookView.as_view(), name='add_book'),
     path('list_book/', views.ListBookView.as_view(), name='list_book'),
