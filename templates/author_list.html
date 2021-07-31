@@ -1,5 +1,6 @@
-<ul>
-{% for author in authors %}
-    <li>{{ author.first_name }} {{ author.last_name }}</li>
-{% endfor %}
-</ul>
+{% extends 'base.html' %}
+{% block zawartosc %}
+    {% for author in authors %}
+        <li>{{ author.first_name }} {{ author.last_name }}</li>
+    {% endfor %}
+{% endblock %}

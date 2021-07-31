@@ -1,5 +1,8 @@
-<ul>
-    {% for book in books %}
-        <li>{{ book.title }}</li>
-    {% endfor %}
-</ul>
+{% extends 'base.html' %}
+{% block zawartosc %}
+    <ul>
+        {% for book in books %}
+            <li>{{ book.title }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.urls import reverse
 from django.views import View
 
 from jej.models import Author, Book
@@ -22,13 +23,19 @@ class NameListView(View):
 
 class AddAuthorView(View):
     def get(self, request):
-        return render(request, 'addAuthorForm.html')
+        author_id = request.GET.get('id')
+        if author_id is not None:
+            author = Author.objects.get(id=author_id)
+        else:
+            author = None
+        return render(request, 'addAuthorForm.html', {'author':author})
 
     def post(self, request):
         imie = request.POST.get('first_name')
         nazwisko = request.POST.get('last_name')
-        Author.objects.create(first_name=imie, last_name=nazwisko)
-        return redirect('add_author')
+        a = Author.objects.create(first_name=imie, last_name=nazwisko)
+        url = reverse('add_author') + f"?id={a.id}"
+        return redirect(url)
 
 
 class ListAuthorView(View):
